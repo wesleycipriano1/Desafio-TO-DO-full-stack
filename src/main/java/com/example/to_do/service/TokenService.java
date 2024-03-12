@@ -10,12 +10,19 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.to_do.entidades.Usuario;
 @Service
 public class TokenService {
+    //mudar para chave aleatoria 
     final String secreto="chave";
 
     public String gerarToken(Usuario usuario) {
        return JWT.create().withIssuer("Usuario").withSubject(usuario.getEmail()).withClaim("id", usuario.getId())
-       .withExpiresAt(LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.of("-03:00")))
+       .withExpiresAt(LocalDateTime.now().plusSeconds(100)//mudar para minutos depois
+       .toInstant(ZoneOffset.of("-03:00")))
        .sign(Algorithm.HMAC256(secreto));
+    }
+
+    public String getSubject(String token) {
+        return JWT.require(Algorithm.HMAC256(secreto)).withIssuer("Usuario").build().verify(token).getSubject();
+
     }
 
 }
