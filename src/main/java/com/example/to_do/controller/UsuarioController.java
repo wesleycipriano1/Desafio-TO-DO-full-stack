@@ -12,7 +12,7 @@ import com.example.to_do.dtos.LoginDTO;
 import com.example.to_do.dtos.UsuarioDTO;
 import com.example.to_do.dtos.UsuarioResponseDTO;
 import com.example.to_do.entidades.Usuario;
-
+import com.example.to_do.service.LoginService;
 import com.example.to_do.service.TokenService;
 import com.example.to_do.service.UsuarioService;
 
@@ -27,6 +27,8 @@ public class UsuarioController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private  TokenService  tokenService; 
+    @Autowired
+    public LoginService loginService;
 
     
 
@@ -44,13 +46,8 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginDTO loginDTO)  {
-      UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken= 
-      new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getSenha());
-       Authentication authenticate= this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-       var usuario= (Usuario)authenticate.getPrincipal();
-       return tokenService.gerarToken(usuario);
-       
-    
+    Usuario usuario = loginService.verificarUsuario(loginDTO.getEmail(), loginDTO.getSenha());
+    return tokenService.gerarToken(usuario);
 }
 
 }

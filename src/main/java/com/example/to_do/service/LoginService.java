@@ -51,4 +51,17 @@ public class LoginService {
 
         return usuarioResponseDTO;
     }
+    public Usuario verificarUsuario(String email, String senha) {
+        Usuario usuario = usuarioRepository.findUsuarioByEmail(email);
+        if (usuario == null) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(senha, ( usuario).getSenha())) {
+            throw new RuntimeException("Senha inválida");
+        }
+
+        return (Usuario) usuario;
+    }
 }
