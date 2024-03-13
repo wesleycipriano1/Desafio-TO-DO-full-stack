@@ -45,18 +45,21 @@ public ResponseEntity<TarefaResponseDTO> alterarTarefa(@PathVariable Long id, @R
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(tarefaResponseDTO.getId()).toUri();
     return ResponseEntity.created(uri).body(tarefaResponseDTO);
 }
-@PutMapping("/tarefas/concluir{id}")
+@PutMapping("/concluir/{id}")
 public ResponseEntity<TarefaResponseDTO> concluirTarefa(@PathVariable Long id) {
     TarefaResponseDTO tarefaResponseDTO = tarefaService.concluirTarefa(id);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(tarefaResponseDTO.getId()).toUri();
     return ResponseEntity.created(uri).body(tarefaResponseDTO);
 }
-@GetMapping("/tarefas/pendentes")
+@GetMapping("/pendentes")
 public ResponseEntity<List<TarefaResponseDTO>> listarTarefasPendentes(@RequestParam(required = false) String prioridade) {
-    List<TarefaResponseDTO> tarefas = tarefaService.listarTarefasPendentes(prioridade);
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-    return ResponseEntity.created(uri).body(tarefas);
+    
+        List<TarefaResponseDTO> tarefas = tarefaService.listarTarefasPendentes(prioridade);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(uri).body(tarefas);
+   
 }
+
 
 
 

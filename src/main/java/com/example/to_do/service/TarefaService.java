@@ -29,6 +29,18 @@ public class TarefaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
+
+    private UserDetails getAuthenticatedUser() {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principal instanceof UserDetails) {
+                return (UserDetails) principal;
+            } else {
+                throw new UsernameNotFoundException("Usuário não encontrado");
+            }
+        }
+
+        
     public TarefaResponseDTO criarTarefa(TarefasDTO tarefaDto) {
         Tarefas tarefa = new Tarefas();
         tarefa.setDescricao(tarefaDto.getDescricao());
@@ -82,14 +94,7 @@ public class TarefaService {
         }
     }
     
-    private UserDetails getAuthenticatedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return (UserDetails) principal;
-        } else {
-            throw new UsernameNotFoundException("Usuário não encontrado");
-        }
-    }
+    
     public TarefaResponseDTO alterarTarefa(Long id, TarefasDTO tarefaDto) {
     Tarefas tarefa = tarefaRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com o id " + id));
