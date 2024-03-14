@@ -2,7 +2,8 @@ package com.example.to_do.dtos;
 
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 public class UsuarioResponseDTO {
     private Long id;
     private String nome;

@@ -2,6 +2,7 @@ package com.example.to_do.entidades;
 
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +30,9 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario implements UserDetails{
+public class Usuario implements UserDetails, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,8 +52,7 @@ public class Usuario implements UserDetails{
     private List<Tarefas> tarefas = new ArrayList<>();
 
     public void setSenha(String senha) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.senha = passwordEncoder.encode(senha);
+        this.senha = senha;
     }
 
     @Override
@@ -72,7 +74,6 @@ public class Usuario implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
         return true;
     }
 

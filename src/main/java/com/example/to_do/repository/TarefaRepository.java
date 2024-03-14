@@ -8,6 +8,6 @@ import com.example.to_do.entidades.Tarefas;
 import com.example.to_do.entidades.Usuario;
 public interface TarefaRepository extends JpaRepository<Tarefas, Long> {
     List<Tarefas> findByUsuarioAndConcluida(Usuario usuario, boolean concluida);
-    List<Tarefas> findByUsuarioAndConcluidaAndPrioridade(Usuario usuario, boolean concluida, String prioridade);
+    List<Tarefas> findByUsuarioAndConcluidaAndPrioridade(Usuario usuario, boolean concluida, Tarefas.Prioridade prioridade);
     List<Tarefas> findByUsuario(Usuario usuario);
 }

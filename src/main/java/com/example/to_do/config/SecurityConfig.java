@@ -30,8 +30,14 @@ public class SecurityConfig {
         http.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().authorizeHttpRequests()
-            .requestMatchers(HttpMethod.POST,"/usuarios/cadastrar").permitAll()
+            .requestMatchers(HttpMethod.GET,"/cadastrar").permitAll()
+            .requestMatchers(HttpMethod.GET,"/login").permitAll()
             .requestMatchers(HttpMethod.POST,"/usuarios/login").permitAll()
+            .requestMatchers(HttpMethod.POST,"/usuarios/cadastrar").permitAll()
+            .requestMatchers(HttpMethod.GET,"/home").permitAll()
+            .requestMatchers("/tarefas/pendentes").permitAll()
+            .requestMatchers("/js/**", "/css/**", "/images/**").permitAll() 
+          
             .anyRequest().authenticated().and().addFilterBefore(
                 filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

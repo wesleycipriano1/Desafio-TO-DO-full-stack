@@ -1,5 +1,7 @@
 package com.example.to_do.entidades;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,7 +19,8 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tarefas {
+public class Tarefas implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     public enum Prioridade {
         ALTA,
@@ -26,7 +29,7 @@ public class Tarefas {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "O campo descrição não pode ser vazio")

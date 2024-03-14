@@ -10,7 +10,7 @@ import lombok.Setter;
 public class TarefaResponseDTO {
 
     private Long id;
-    private Prioridade prioridade; 
+    private String prioridade; 
     private String descricao;
     private boolean concluido;
 

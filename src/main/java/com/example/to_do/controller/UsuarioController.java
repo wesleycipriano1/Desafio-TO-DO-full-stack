@@ -34,7 +34,7 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        UsuarioResponseDTO usuarioResponseDTO = usuarioService.cadastrarUsuario(usuarioDTO);
+        UsuarioResponseDTO usuarioResponseDTO = usuarioService.registrarUsuario(usuarioDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioResponseDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(usuarioResponseDTO);
     }

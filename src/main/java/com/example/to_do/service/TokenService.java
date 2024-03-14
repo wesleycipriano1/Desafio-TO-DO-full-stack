@@ -11,8 +11,13 @@ import com.example.to_do.entidades.Usuario;
 @Service
 public class TokenService {
     //mudar para chave aleatoria 
-    final String secreto="chave";
+    
+    private final String secreto="chave";
 
+    /**
+     * @param usuario
+     * @return
+     */
     public String gerarToken(Usuario usuario) {
        return JWT.create().withIssuer("Usuario").withSubject(usuario.getEmail()).withClaim("id", usuario.getId())
        .withExpiresAt(LocalDateTime.now().plusMinutes(15)
