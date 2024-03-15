@@ -21,7 +21,7 @@ import com.example.to_do.dtos.TarefasDTO;
 import com.example.to_do.service.TarefaService;
 
 @RestController
-@RequestMapping("/tarefa")
+@RequestMapping("/api/tarefa")
 public class TarefaController {
 
     @Autowired

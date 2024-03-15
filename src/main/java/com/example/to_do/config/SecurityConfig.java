@@ -32,11 +32,16 @@ public class SecurityConfig {
             .and().authorizeHttpRequests()
             .requestMatchers(HttpMethod.GET,"/cadastrar").permitAll()
             .requestMatchers(HttpMethod.GET,"/login").permitAll()
-            .requestMatchers(HttpMethod.POST,"/usuarios/login").permitAll()
-            .requestMatchers(HttpMethod.POST,"/usuarios/cadastrar").permitAll()
+            .requestMatchers(HttpMethod.POST,"/login").permitAll()
+            .requestMatchers(HttpMethod.POST,"/api/usuarios/login").permitAll()
+            .requestMatchers(HttpMethod.POST,"/api/usuarios/cadastrar").permitAll()
             .requestMatchers(HttpMethod.GET,"/home").permitAll()
-            .requestMatchers("/tarefas/pendentes").permitAll()
-            .requestMatchers("/js/**", "/css/**", "/images/**").permitAll() 
+            .requestMatchers(HttpMethod.GET,"/tarefas/pendentes").permitAll()
+            .requestMatchers(HttpMethod.GET,"/cadastroTarefa").permitAll()
+            .requestMatchers(HttpMethod.POST,"/tarefa/cadastrar").permitAll()
+            .requestMatchers("/cadastrar").permitAll()
+            .requestMatchers(HttpMethod.POST,"/concluir/{id}").permitAll() 
+            .requestMatchers("/js/**", "/css/**", "/img/**").permitAll() 
           
             .anyRequest().authenticated().and().addFilterBefore(
                 filter, UsernamePasswordAuthenticationFilter.class);

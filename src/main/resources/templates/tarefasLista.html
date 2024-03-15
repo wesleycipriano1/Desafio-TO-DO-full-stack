@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Tarefas Pendentes</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'}">
 </head>
 <body>
     <div class="container">
         <h2>Tarefas Pendentes</h2>
+        <button onclick="location.href='/cadastroTarefa'" type="button">Cadastrar</button>
         <table class="table">
             <thead>
                 <tr>
@@ -16,10 +17,20 @@
                 </tr>
             </thead>
             <tbody id="tarefas">
-                <!-- As tarefas serão inseridas aqui -->
+                <tr th:each="tarefa : ${tarefas}">
+                    <td th:text="${tarefa.descricao}"></td>
+                    <td th:text="${tarefa.prioridade}"></td>
+                    <td>
+                        <form th:action="@{/concluir/{id}(id=${tarefa.id})}" th:method="post">
+                            <input type="submit" value="Concluir">
+                        </form>
+
+                        
+
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
-    <script src="/js/tarefas.js"></script>
 </body>
 </html>

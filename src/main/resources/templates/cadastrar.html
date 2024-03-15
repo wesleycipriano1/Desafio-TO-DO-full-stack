@@ -1,46 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Cadastro</title>
+    <title>Cadastro de Usuário</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: black;
-            color: white;
-        }
-        .dark-panel {
-            background-color: #333;
-            height: 100vh;
-        }
-    </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Cadastro</h2>
-                <form id="cadastro-form">
-                    <div class="form-group">
-                        <label for="nome">Nome:</label>
-                        <input type="text" class="form-control" id="nome" placeholder="Digite seu nome" name="nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" placeholder="Digite seu email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="senha">Senha:</label>
-                        <input type="password" class="form-control" id="senha" placeholder="Digite sua senha" name="senha" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                </form>
-                <p id="error-message" style="color: red;"></p>
-            </div>
-            <div class="col-md-6 dark-panel">
-                <!-- Você pode adicionar conteúdo aqui se quiser -->
-            </div>
-        </div>
-    </div>
-    <script src="/js/cadastro.js"></script>
+    <h1>Cadastro de Usuário</h1>
+    <form action="#" th:action="@{/usuario/cadastrar}" th:object="${usuarioDTO}" method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" th:field="*{nome}" id="nome" required>
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{email}" id="email" required>
+        <label for="senha">Senha:</label>
+        <input type="password" th:field="*{senha}" id="senha" required>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
 </body>
 </html>

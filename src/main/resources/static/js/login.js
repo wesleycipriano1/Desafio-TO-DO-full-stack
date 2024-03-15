@@ -1,7 +1,7 @@
 
         document.getElementById('login-button').addEventListener('click', function(event) {
             var email = document.querySelector('#login-form input[name="email"]').value;
-            var senha = document.querySelector('#login-form input[name="psw"]').value;
+            var senha = document.querySelector('#login-form input[name="senha"]').value;
         
             fetch('/usuarios/login', {
                 method: 'POST',
@@ -19,7 +19,6 @@
             .then(token => {
                 localStorage.setItem('token', token);
                 
-                console.log(localStorage);
                 setTimeout(function(){  }, 4000);
                   
                     window.location.href = '/tarefas/pendentes';

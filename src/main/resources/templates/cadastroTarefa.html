@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cadastro de Tarefas</title>
+    <link rel="stylesheet" th:href="@{'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'}">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro de Tarefas</h2>
+        <form th:action="@{/tarefa/cadastrar}" th:method="post">
+            <label for="descricao">Descrição:</label><br>
+            <input type="text" id="descricao" name="descricao"><br>
+            <label for="prioridade">Prioridade:</label><br>
+            <select id="prioridade" name="prioridade">
+                <option value="ALTA">Alta</option>
+                <option value="MEDIA">Média</option>
+                <option value="BAIXA">Baixa</option>
+            </select><br>
+            <input type="submit" value="Cadastrar">
+        </form>
+    </div>
+</body>
+</html>
