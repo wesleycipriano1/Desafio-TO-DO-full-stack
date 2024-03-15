@@ -1,5 +1,5 @@
 package com.example.to_do.controllerFront;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,18 +31,26 @@ public class ViewControllerUsuario {
         model.addAttribute("usuario", new UsuarioDTO());
         return "lo";
     }
-     @PostMapping("/login")
-    public String login(UsuarioDTO usuario, Model model, HttpServletRequest request) {
+    @PostMapping("/login")
+    public String login(UsuarioDTO usuario, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/usuarios/login", usuario, String.class);
-        String token = response.getBody();
-        System.out.println("o tokem é -------------------------------------- "+token);
-
-       
-        request.getSession().setAttribute("token", token);
-
-        return "redirect:/tarefas/pendentes";
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/usuarios/login", usuario, String.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                String token = response.getBody();
+                request.getSession().setAttribute("token", token);
+                
+            } return "redirect:/tarefas/pendentes";
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                redirectAttributes.addFlashAttribute("error", "email ou senha invalidos");
+                
+            } 
+            return "redirect:/login";
+        }
     }
+    
+
 
     @GetMapping("/cadastrar")
     public String mostrarFormulario(UsuarioDTO usuarioDTO) {
@@ -50,7 +58,7 @@ public class ViewControllerUsuario {
     }
 
    @PostMapping("/usuario/cadastrar")
-    public String cadastrarUsuario(@Valid UsuarioDTO usuarioDTO, BindingResult result, Model model) {
+    public String cadastrarUsuario(@Valid UsuarioDTO usuarioDTO,RedirectAttributes redirectAttributes, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "cadastrar";
         }

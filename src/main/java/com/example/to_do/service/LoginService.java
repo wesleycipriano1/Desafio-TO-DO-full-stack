@@ -21,7 +21,6 @@ public class LoginService {
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println("senha que vem da tela " +senha + "---->senha que vem do banco "+usuario.getSenha());
         if (!passwordEncoder.matches(senha, usuario.getSenha())) {
             throw new SenhaInvalidaException("Senha inválida");
         }

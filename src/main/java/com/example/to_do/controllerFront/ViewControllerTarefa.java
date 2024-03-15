@@ -35,21 +35,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ViewControllerTarefa {
 
 
-
     @GetMapping("/tarefas/pendentes")
-    public String getTarefas(Model model, HttpSession session) {
-    String token = (String) session.getAttribute("token");
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", token);
-    HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-    ResponseEntity<List<TarefaResponseDTO>> response = restTemplate.exchange(
-            "http://localhost:8080/api/tarefa/pendentes", HttpMethod.GET, entity,
-            new ParameterizedTypeReference<List<TarefaResponseDTO>>() {});
-    List<TarefaResponseDTO> tarefas = response.getBody();
-    model.addAttribute("tarefas", tarefas);
-    return "tarefasLista";
-}
+    public String getTarefasPorPrioridade(@RequestParam(required = false) String prioridade, Model model, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+        String url = "http://localhost:8080/api/tarefa/pendentes";
+        if (prioridade != null && !prioridade.isEmpty() && !prioridade.equals("TODOS")) {
+            url += "?prioridade=" + prioridade;
+        }
+        ResponseEntity<List<TarefaResponseDTO>> response = restTemplate.exchange(
+                url, HttpMethod.GET, entity,
+                new ParameterizedTypeReference<List<TarefaResponseDTO>>() {});
+        List<TarefaResponseDTO> tarefas = response.getBody();
+        model.addAttribute("tarefas", tarefas);
+        return "tarefasLista";
+    }
+    
+    
 @PostMapping("/concluir/{id}")
 public String concluirTarefa(@PathVariable("id") Long id, HttpSession session) {
    
@@ -75,42 +80,39 @@ public String concluirTarefa(@PathVariable("id") Long id, HttpSession session) {
     }
 }
 
-@GetMapping("/cadastroTarefa")
+    @GetMapping("/cadastroTarefa")
     public String mostrarFormulario() {
         return "cadastroTarefa";
     }
 
 
     @PostMapping("/tarefa/cadastrar")
-public String cadastrarTarefa(@Valid TarefasDTO tarefaDTO, BindingResult result, Model model, HttpServletRequest request) {
-    
+    public String cadastrarTarefa(@Valid TarefasDTO tarefaDTO, BindingResult result, Model model, HttpServletRequest request) {
+        
 
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-    String token = (String) request.getSession().getAttribute("token");
-    headers.set("Authorization", token);
-    System.out.println("----------------------------------------------------------------"+token);
+        String token = (String) request.getSession().getAttribute("token");
+        headers.set("Authorization", token);
+        
 
-    HttpEntity<TarefasDTO> entity = new HttpEntity<>(tarefaDTO, headers);
-    try {
-        ResponseEntity<TarefaResponseDTO> response = restTemplate.postForEntity("http://localhost:8080/api/tarefa/cadastrar", entity, TarefaResponseDTO.class);
-        System.out.println("================================================="+response.getStatusCode());
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            return "redirect:/tarefas/pendentes";
-        } else {
+        HttpEntity<TarefasDTO> entity = new HttpEntity<>(tarefaDTO, headers);
+        try {
+            ResponseEntity<TarefaResponseDTO> response = restTemplate.postForEntity("http://localhost:8080/api/tarefa/cadastrar", entity, TarefaResponseDTO.class); 
+            if (response.getStatusCode() == HttpStatus.CREATED) {
+                return "redirect:/tarefas/pendentes";
+            } else {
+                return "cadastroTarefa";
+            }
+        } catch (HttpClientErrorException e) {
+        
+                model.addAttribute("error", "Ocorreu um erro ao tentar registrar a tarefa");
+            
             return "cadastroTarefa";
         }
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatus.CONFLICT) {
-            model.addAttribute("error", "Já existe uma tarefa com esta descrição");
-        } else {
-            model.addAttribute("error", "Ocorreu um erro ao tentar registrar a tarefa");
-        }
-        return "cadastroTarefa";
     }
-}
 
 
 

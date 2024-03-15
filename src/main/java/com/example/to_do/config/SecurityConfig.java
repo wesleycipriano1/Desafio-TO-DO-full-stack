@@ -31,6 +31,7 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().authorizeHttpRequests()
             .requestMatchers(HttpMethod.GET,"/cadastrar").permitAll()
+            .requestMatchers("/lo").permitAll()
             .requestMatchers(HttpMethod.GET,"/login").permitAll()
             .requestMatchers(HttpMethod.POST,"/login").permitAll()
             .requestMatchers(HttpMethod.POST,"/api/usuarios/login").permitAll()

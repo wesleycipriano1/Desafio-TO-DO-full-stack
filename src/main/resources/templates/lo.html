@@ -13,18 +13,24 @@
             <p class="login-comecar">Faça login para começar</p>
             <p class="mensagem-motivacional">No centro de tudo que fazemos, você é a nossa prioridade.<br>
                  Bem-vindo de volta, vamos juntos transformar o seu dia!</p>
-            <button th:onclick="'window.location.href=\'\' + ${#uris.escapePath('/cadastrar')}'" id="cadastra-buttom">cadastrar-se</button>
+                 <button onclick="window.location.href='/cadastrar'" id="cadastra-buttom">Cadastrar-se</button>
+
         </div>
         <div class="login">
             <form id="login-form" th:action="@{/login}" method="post">
                 <h2>Login</h2>
                 <label for="email"><b>Email</b></label>
-                <input type="email" id="email" name="email" placeholder="Enter Email" required th:field="*{usuario.email}">
+                <input type="email" id="email" name="email" placeholder=" digite o Email" required th:field="*{usuario.email}">
                 <label for="senha"><b>Senha</b></label>
-                <input type="password" id="senha" name="senha" placeholder="Enter Password" required th:field="*{usuario.senha}">
-                <button type="submit" id="login-button">login</button>
-            </form>
+                <input type="password" id="senha" name="senha" placeholder=" digite a senha" required th:field="*{usuario.senha}">
+                <button type="submit" id="login-button">login</button> 
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
         </div>
+    </div>
+        
+            </form>
+       
     </div>
 </body>
 </html>

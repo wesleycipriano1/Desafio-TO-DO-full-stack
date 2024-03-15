@@ -14,13 +14,10 @@ public class TokenService {
     
     private final String secreto="chave";
 
-    /**
-     * @param usuario
-     * @return
-     */
+    
     public String gerarToken(Usuario usuario) {
        return JWT.create().withIssuer("Usuario").withSubject(usuario.getEmail()).withClaim("id", usuario.getId())
-       .withExpiresAt(LocalDateTime.now().plusMinutes(15)
+       .withExpiresAt(LocalDateTime.now().plusMinutes(60)//lembrar de mudar pra 15 depois dos testes
        .toInstant(ZoneOffset.of("-03:00")))
        .sign(Algorithm.HMAC256(secreto));
     }

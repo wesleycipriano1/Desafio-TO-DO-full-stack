@@ -2,12 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Tarefas Pendentes</title>
-    <link rel="stylesheet" th:href="@{'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'}">
+    <link rel="stylesheet" th:href="@{/css/tarefas.css}">
 </head>
 <body>
     <div class="container">
         <h2>Tarefas Pendentes</h2>
         <button onclick="location.href='/cadastroTarefa'" type="button">Cadastrar</button>
+        <form th:action="@{/tarefas/pendentes}" method="get">
+            <select name="prioridade" onchange="this.form.submit()">
+                <option value="">Selecione a prioridade</option>
+                <option value="">TODOS</option>
+                <option value="ALTA">Alta</option>
+                <option value="MEDIA">Média</option>
+                <option value="BAIXA">Baixa</option>
+            </select>
+        </form>
+        <div class="tabela">
         <table class="table">
             <thead>
                 <tr>
@@ -31,6 +41,7 @@
                 </tr>
             </tbody>
         </table>
+    </div>
     </div>
 </body>
 </html>
