@@ -1,4 +1,5 @@
 package com.example.to_do.controller;
+
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.*;
@@ -27,36 +28,31 @@ public class UsuarioController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private  TokenService  tokenService; 
+    private TokenService tokenService;
     @Autowired
     public LoginService loginService;
 
-    
-@PostMapping("/cadastrar")
-public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-    try {
-        UsuarioResponseDTO usuarioResponseDTO = usuarioService.registrarUsuario(usuarioDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioResponseDTO.getId()).toUri();
-        return ResponseEntity.created(uri).body(usuarioResponseDTO);
-    } catch (UsuarioJaExisteException  | SenhaInvalidaException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    @PostMapping("/cadastrar")
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        try {
+            UsuarioResponseDTO usuarioResponseDTO = usuarioService.registrarUsuario(usuarioDTO);
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(usuarioResponseDTO.getId()).toUri();
+            return ResponseEntity.created(uri).body(usuarioResponseDTO);
+        } catch (UsuarioJaExisteException | SenhaInvalidaException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+
     }
-    
-}
 
-
-    
-
-
-    
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-    try {
-        Usuario usuario = loginService.verificarUsuario(loginDTO.getEmail(), loginDTO.getSenha());
-        return ResponseEntity.ok(tokenService.gerarToken(usuario));
-    } catch (UsuarioNaoEncontradoException | SenhaInvalidaException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        try {
+            Usuario usuario = loginService.verificarUsuario(loginDTO.getEmail(), loginDTO.getSenha());
+            return ResponseEntity.ok(tokenService.gerarToken(usuario));
+        } catch (UsuarioNaoEncontradoException | SenhaInvalidaException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
-}
 
 }

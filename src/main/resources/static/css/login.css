@@ -30,6 +30,9 @@ body {
     color: #ff7f00;
     font-size: 2em;
 }
+.alerta {
+    color: red;
+}
 
 .login {
     background-color: rgba(255, 255, 255, 0.4);

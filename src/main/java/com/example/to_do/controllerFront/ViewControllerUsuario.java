@@ -1,5 +1,6 @@
 package com.example.to_do.controllerFront;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes; 
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,36 +32,39 @@ public class ViewControllerUsuario {
         model.addAttribute("usuario", new UsuarioDTO());
         return "lo";
     }
+
     @PostMapping("/login")
-    public String login(UsuarioDTO usuario, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request) {
+    public String login(UsuarioDTO usuario, Model model, RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
         RestTemplate restTemplate = new RestTemplate();
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/usuarios/login", usuario, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/usuarios/login",
+                    usuario, String.class);
             if (response.getStatusCode() == HttpStatus.OK) {
                 String token = response.getBody();
                 request.getSession().setAttribute("token", token);
-                
-            } return "redirect:/tarefas/pendentes";
+
+            }
+            return "redirect:/tarefas/pendentes";
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 redirectAttributes.addFlashAttribute("error", "email ou senha invalidos");
-                
-            } 
+
+            }
             return "redirect:/login";
         }
     }
-    
-
 
     @GetMapping("/cadastrar")
     public String mostrarFormulario(UsuarioDTO usuarioDTO) {
         return "cadastrar";
     }
 
-   @PostMapping("/usuario/cadastrar")
-    public String cadastrarUsuario(@Valid UsuarioDTO usuarioDTO,RedirectAttributes redirectAttributes, BindingResult result, Model model) {
+    @PostMapping("/usuario/cadastrar")
+    public String cadastrarUsuario(@Valid UsuarioDTO usuarioDTO, RedirectAttributes redirectAttributes,
+            BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "cadastrar";
+            return "redirect:/cadastrar";
         }
 
         RestTemplate restTemplate = new RestTemplate();
@@ -69,23 +73,23 @@ public class ViewControllerUsuario {
 
         HttpEntity<UsuarioDTO> request = new HttpEntity<>(usuarioDTO, headers);
         try {
-            ResponseEntity<UsuarioResponseDTO> response = restTemplate.postForEntity("http://localhost:8080/api/usuarios/cadastrar", request, UsuarioResponseDTO.class);
+            ResponseEntity<UsuarioResponseDTO> response = restTemplate
+                    .postForEntity("http://localhost:8080/api/usuarios/cadastrar", request, UsuarioResponseDTO.class);
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
-                return "redirect:/login";
+                redirectAttributes.addFlashAttribute("sucesso", "cadastrado  com sucesso");
+                return "redirect:/cadastrar";
             } else {
-                
-                return "cadastrar";
+
+                return "redirect:/cadastrar";
             }
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.CONFLICT) {
-                model.addAttribute("error", "Já existe um usuário com este e-mail");
-            } else {
-                model.addAttribute("error", "Ocorreu um erro ao tentar registrar o usuário");
+                String errorMessage = e.getResponseBodyAsString();
+                redirectAttributes.addFlashAttribute("error", errorMessage);
             }
-            return "cadastrar";
+            return "redirect:/cadastrar";
         }
     }
-
 
 }

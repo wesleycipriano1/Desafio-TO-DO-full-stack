@@ -24,7 +24,7 @@
                 <label for="senha"><b>Senha</b></label>
                 <input type="password" id="senha" name="senha" placeholder=" digite a senha" required th:field="*{usuario.senha}">
                 <button type="submit" id="login-button">login</button> 
-            <div th:if="${error}" class="alert alert-danger" role="alert">
+            <div th:if="${error}" class="alerta" role="alert">
             <p th:text="${error}"></p>
         </div>
     </div>

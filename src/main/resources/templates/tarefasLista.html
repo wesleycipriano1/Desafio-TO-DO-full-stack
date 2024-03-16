@@ -1,47 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+  <head>
     <title>Tarefas Pendentes</title>
-    <link rel="stylesheet" th:href="@{/css/tarefas.css}">
-</head>
-<body>
+    <link rel="stylesheet" th:href="@{/css/tarefas.css}" />
+  </head>
+  <body style="background-image: url('/img/fundo.png'); background-size: cover;">
     <div class="container">
+      <div class="titulo">
         <h2>Tarefas Pendentes</h2>
-        <button onclick="location.href='/cadastroTarefa'" type="button">Cadastrar</button>
+      </div>
+      <div class="corpo">
+        <button
+          id="bt-cadastar"
+          onclick="location.href='/cadastroTarefa'"
+          type="button"
+        >
+          Cadastrar nova tarefa
+        </button>
         <form th:action="@{/tarefas/pendentes}" method="get">
-            <select name="prioridade" onchange="this.form.submit()">
-                <option value="">Selecione a prioridade</option>
-                <option value="">TODOS</option>
-                <option value="ALTA">Alta</option>
-                <option value="MEDIA">Média</option>
-                <option value="BAIXA">Baixa</option>
-            </select>
+          <select name="prioridade" onchange="this.form.submit()">
+            <option value="">Selecione a prioridade</option>
+            <option value="">TODOS</option>
+            <option value="ALTA">Alta</option>
+            <option value="MEDIA">Média</option>
+            <option value="BAIXA">Baixa</option>
+          </select>
         </form>
-        <div class="tabela">
+      </div>
+      <div class="tabela">
         <table class="table">
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Prioridade</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="tarefas">
-                <tr th:each="tarefa : ${tarefas}">
-                    <td th:text="${tarefa.descricao}"></td>
-                    <td th:text="${tarefa.prioridade}"></td>
-                    <td>
-                        <form th:action="@{/concluir/{id}(id=${tarefa.id})}" th:method="post">
-                            <input type="submit" value="Concluir">
-                        </form>
-
-                        
-
-                    </td>
-                </tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Prioridade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tarefas">
+            <tr th:each="tarefa : ${tarefas}">
+              <td th:text="${tarefa.descricao}"></td>
+              <td th:text="${tarefa.prioridade}"></td>
+              <td>
+                <form
+                  th:action="@{/concluir/{id}(id=${tarefa.id})}"
+                  th:method="post"
+                >
+                  <input type="submit" value="Concluir" />
+                </form>
+              </td>
+            </tr>
+          </tbody>
         </table>
+      </div>
     </div>
-    </div>
-</body>
+  </body>
 </html>

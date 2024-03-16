@@ -40,7 +40,7 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET,"/tarefas/pendentes").permitAll()
             .requestMatchers(HttpMethod.GET,"/cadastroTarefa").permitAll()
             .requestMatchers(HttpMethod.POST,"/tarefa/cadastrar").permitAll()
-            .requestMatchers("/cadastrar").permitAll()
+            .requestMatchers("/usuario/cadastrar").permitAll()
             .requestMatchers(HttpMethod.POST,"/concluir/{id}").permitAll() 
             .requestMatchers("/js/**", "/css/**", "/img/**").permitAll() 
           

@@ -62,6 +62,13 @@ body {
         justify-content: flex-start; 
         padding-top: 10px; 
     }
+    .alerta {
+        color: red;
+    }
+    .alerta-sucesso{
+        color: green;
+        font: bold;
+    }
 
 .cadastro label{
     margin-bottom: 1em; 

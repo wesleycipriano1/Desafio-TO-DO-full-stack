@@ -1,5 +1,6 @@
 package com.example.to_do.dtos;
 
+import com.example.to_do.entidades.Tarefas;
 import com.example.to_do.entidades.Tarefas.Prioridade;
 
 import lombok.Getter;
@@ -13,6 +14,16 @@ public class TarefaResponseDTO {
     private String prioridade; 
     private String descricao;
     private boolean concluido;
+
+
+    public static TarefaResponseDTO from(Tarefas tarefa) {
+        TarefaResponseDTO tarefaResponseDTO = new TarefaResponseDTO();
+        tarefaResponseDTO.setId(tarefa.getId());
+        tarefaResponseDTO.setDescricao(tarefa.getDescricao());
+        tarefaResponseDTO.setPrioridade(tarefa.getPrioridade().name());
+        tarefaResponseDTO.setConcluido(tarefa.isConcluida());
+        return tarefaResponseDTO;
+    }
 
     
 }

@@ -42,7 +42,7 @@ public void testVerificarUsuarioNaoExisteEmail() {
 }
 @Test
 public void testVerificarUsuarioSenhaInvalida() {
-    
+
     String email = "test@example.com";
     String senha = "password";
     String senhaIncorreta = "senhaIncorreta";
@@ -66,7 +66,7 @@ public void testVerificarUsuarioSenhaValida() {
     
     String email = "test@example.com";
     String senha = "password";
-    String senhainvalida="";
+    String senhainvalida="uma senha que não seja a do usuario";
 
     Usuario usuario = new Usuario();
     usuario.setEmail(email);
