@@ -12,13 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.to_do.dtos.TarefaResponseDTO;
 import com.example.to_do.dtos.TarefasDTO;
-import com.example.to_do.entidades.Tarefas;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,7 +50,7 @@ public class ViewControllerTarefa {
         model.addAttribute("tarefas", tarefas);
         return "tarefasLista";
     }
-
+    
     @PostMapping("/concluir/{id}")
     public String concluirTarefa(@PathVariable("id") Long id, HttpSession session) {
 

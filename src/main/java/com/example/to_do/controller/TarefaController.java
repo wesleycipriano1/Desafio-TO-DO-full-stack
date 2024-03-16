@@ -19,6 +19,11 @@ import com.example.to_do.dtos.TarefasDTO;
 import com.example.to_do.excecao.DadosVaziosException;
 import com.example.to_do.service.TarefaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/tarefa")
 public class TarefaController {
@@ -26,6 +31,12 @@ public class TarefaController {
     @Autowired
     public TarefaService tarefaService;
 
+    @Operation(summary = "cadastra uma nova tarefa,token é necessario", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "cadastro com sucesso"),
+            @ApiResponse(responseCode = "403", description = "acesso negado,token valido necessario"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrarTarefa(@RequestBody TarefasDTO tarefaDTO) {
         try {
@@ -38,12 +49,24 @@ public class TarefaController {
         }
     }
 
+    @Operation(summary = "Exclui uma  tarefa,token é necessario", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "exluido com sucesso"),
+            @ApiResponse(responseCode = "403", description = "acesso negado,token valido necessario"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
     @DeleteMapping("/excluir/{id}")
     public ResponseEntity<Void> excluirTarefa(@PathVariable Long id) {
         tarefaService.excluirTarefa(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "edita  uma  tarefa,token é necessario", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "alterado com sucesso"),
+            @ApiResponse(responseCode = "403", description = "acesso negado,token valido necessario"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
     @PutMapping("/alterar/{id}")
     public ResponseEntity<TarefaResponseDTO> alterarTarefa(@PathVariable Long id, @RequestBody TarefasDTO tarefaDTO) {
         TarefaResponseDTO tarefaResponseDTO = tarefaService.alterarTarefa(id, tarefaDTO);
@@ -52,6 +75,12 @@ public class TarefaController {
         return ResponseEntity.created(uri).body(tarefaResponseDTO);
     }
 
+    @Operation(summary = "marca uma tarefa como concluida ,token é necessario", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "concuida com sucesso"),
+            @ApiResponse(responseCode = "403", description = "acesso negado,token valido necessario"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
     @PutMapping("/concluir/{id}")
     public ResponseEntity<TarefaResponseDTO> concluirTarefa(@PathVariable Long id) {
         TarefaResponseDTO tarefaResponseDTO = tarefaService.concluirTarefa(id);
@@ -60,6 +89,12 @@ public class TarefaController {
         return ResponseEntity.created(uri).body(tarefaResponseDTO);
     }
 
+    @Operation(summary = "listas tarefas não concuidas ,token é necessario", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sucesso"),
+            @ApiResponse(responseCode = "403", description = "acesso negado,token valido necessario"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
     @GetMapping("/pendentes")
     public ResponseEntity<List<TarefaResponseDTO>> listarTarefasPendentes(
             @RequestParam(required = false) String prioridade) {

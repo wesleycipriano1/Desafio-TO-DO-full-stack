@@ -1,7 +1,6 @@
 package com.example.to_do.controller;
 
 import java.net.URI;
-import java.util.List;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +17,10 @@ import com.example.to_do.service.LoginService;
 import com.example.to_do.service.TokenService;
 import com.example.to_do.service.UsuarioService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
@@ -32,6 +35,14 @@ public class UsuarioController {
     @Autowired
     public LoginService loginService;
 
+    @Operation(summary = "cadastra um usuario se não exitir email cadastrado e a senha atingir os criterios ", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "cadastro com sucesso"),
+            @ApiResponse(responseCode = "403", description = "acesso negado"),
+            @ApiResponse(responseCode = "409", description = "Email já existe ou senha invalida-->letra maisculas,minusculas,numeros e caracteres especiais"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
+
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
@@ -45,6 +56,13 @@ public class UsuarioController {
 
     }
 
+    @Operation(summary = "Realiza o login de um usuario e retorna um token de acesso", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "logim com sucesso"),
+            @ApiResponse(responseCode = "401", description = "usuario ou senha não encontradas"),
+            @ApiResponse(responseCode = "403", description = "acesso negado"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor"),
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         try {

@@ -3,6 +3,7 @@ package com.example.to_do.dtos;
 import com.example.to_do.entidades.Tarefas;
 import com.example.to_do.entidades.Tarefas.Prioridade;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ public class TarefaResponseDTO {
     private String descricao;
     private boolean concluido;
 
-
+    @Hidden
     public static TarefaResponseDTO from(Tarefas tarefa) {
         TarefaResponseDTO tarefaResponseDTO = new TarefaResponseDTO();
         tarefaResponseDTO.setId(tarefa.getId());
