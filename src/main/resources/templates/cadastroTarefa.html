@@ -2,24 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>Cadastro de Tarefas</title>
-    <link
-      rel="stylesheet"
-      th:href="@{'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'}"
-    />
+    <link rel="stylesheet" th:href="@{/css/cadastroTarefas.css}" />
   </head>
-  <body>
+  <body style="background-image: url('/img/fundo.png'); background-size: cover">
     <div class="container">
-      <h2>Cadastro de Tarefas</h2>
-      <form th:action="@{/tarefa/cadastrar}" th:method="post">
+      <h2 id="titulo">Cadastro de Tarefas</h2>
+      <form
+        id="form-tarefa"
+        th:action="@{/tarefa/cadastrar}"
+        th:object="${tarefa}"
+        th:method="post"
+      >
         <label for="descricao">Descrição:</label><br />
-        <input type="text" id="descricao" name="descricao" /><br />
+        <textarea
+          id="descricao"
+          th:field="*{descricao}"
+          class="campo-texto"
+          required
+          maxlength="255"
+          placeholder="Máximo de 255 caracteres"
+        ></textarea>
         <label for="prioridade">Prioridade:</label><br />
-        <select id="prioridade" name="prioridade">
+        <select
+          id="prioridade"
+          th:field="*{prioridade}"
+          name="prioridade"
+          class="campo-selecao"
+        >
           <option value="ALTA">Alta</option>
           <option value="MEDIA">Média</option>
           <option value="BAIXA">Baixa</option></select
         ><br />
-        <input type="submit" value="Cadastrar" />
+        <input type="submit" value="Cadastrar" id="botao-cadastrar" />
+        <button
+          onclick="location.href='/tarefas/pendentes'"
+          type="button"
+          id="botao-voltar"
+        >
+          Voltar
+        </button>
       </form>
     </div>
   </body>

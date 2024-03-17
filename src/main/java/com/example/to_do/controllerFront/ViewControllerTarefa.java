@@ -1,6 +1,8 @@
 package com.example.to_do.controllerFront;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.to_do.dtos.TarefaResponseDTO;
 import com.example.to_do.dtos.TarefasDTO;
@@ -30,36 +33,49 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ViewControllerTarefa {
 
-    @GetMapping("/tarefas/pendentes")
-    public String getTarefasPorPrioridade(@RequestParam(required = false) String prioridade, Model model,
-            HttpSession session) {
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private HttpHeaders obterCabecalhosAutorizacao(HttpSession session) {
         String token = (String) session.getAttribute("token");
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
+        return headers;
+    }
+
+    @GetMapping("/tarefas/pendentes")
+    public String getTarefasPorPrioridade(@RequestParam(required = false) String prioridade, Model model,
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
+
+        HttpHeaders headers = obterCabecalhosAutorizacao(session);
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
         String url = "http://localhost:8080/api/tarefa/pendentes";
         if (prioridade != null && !prioridade.isEmpty() && !prioridade.equals("TODOS")) {
             url += "?prioridade=" + prioridade;
         }
-        ResponseEntity<List<TarefaResponseDTO>> response = restTemplate.exchange(
-                url, HttpMethod.GET, entity,
-                new ParameterizedTypeReference<List<TarefaResponseDTO>>() {
-                });
-        List<TarefaResponseDTO> tarefas = response.getBody();
-        model.addAttribute("tarefas", tarefas);
-        return "tarefasLista";
+        try {
+            ResponseEntity<List<TarefaResponseDTO>> response = restTemplate.exchange(
+                    url, HttpMethod.GET, entity,
+                    new ParameterizedTypeReference<List<TarefaResponseDTO>>() {
+                    });
+            List<TarefaResponseDTO> tarefas = response.getBody();
+            model.addAttribute("tarefas", tarefas);
+            return "tarefasLista";
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
+                redirectAttributes.addFlashAttribute("error", "secessão expirada,faça login novamente ");
+                return "redirect:/login";
+            }
+            throw e;
+        }
     }
-    
+
     @PostMapping("/concluir/{id}")
-    public String concluirTarefa(@PathVariable("id") Long id, HttpSession session) {
+    public String concluirTarefa(@PathVariable("id") Long id, RedirectAttributes redirectAttributes,
+            HttpSession session) {
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        String token = (String) session.getAttribute("token");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
+        HttpHeaders headers = obterCabecalhosAutorizacao(session);
         String url = "http://localhost:8080/api/tarefa/concluir/" + id;
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -68,26 +84,30 @@ public class ViewControllerTarefa {
             restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
             return "redirect:/tarefas/pendentes";
         } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
+                redirectAttributes.addFlashAttribute("error", "secessão expirada,faça login novamente ");
+                return "redirect:/login";
 
-            return "redirect:/erro";
+            } else {
+                return "redirect:/erro";
+            }
+
         }
     }
 
     @GetMapping("/cadastroTarefa")
-    public String mostrarFormulario() {
+    public String mostrarFormulario(Model model) {
+        model.addAttribute("tarefa", new TarefasDTO());
         return "cadastroTarefa";
     }
 
     @PostMapping("/tarefa/cadastrar")
-    public String cadastrarTarefa(@Valid TarefasDTO tarefaDTO, BindingResult result, Model model,
+    public String cadastrarTarefa(@Valid TarefasDTO tarefaDTO, RedirectAttributes redirectAttributes,
+            BindingResult result, Model model,
             HttpServletRequest request) {
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = obterCabecalhosAutorizacao(request.getSession());
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String token = (String) request.getSession().getAttribute("token");
-        headers.set("Authorization", token);
 
         HttpEntity<TarefasDTO> entity = new HttpEntity<>(tarefaDTO, headers);
         try {
@@ -99,11 +119,18 @@ public class ViewControllerTarefa {
                 return "cadastroTarefa";
             }
         } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
+                redirectAttributes.addFlashAttribute("error", "secessão expirada,faça login novamente ");
+                return "redirect:/login";
 
-            model.addAttribute("error", "Ocorreu um erro ao tentar registrar a tarefa");
+            } else {
 
-            return "cadastroTarefa";
+                redirectAttributes.addFlashAttribute("error", "Ocorreu um erro ao tentar registrar a tarefa");
+
+                return "cadastroTarefa";
+            }
         }
+
     }
 
 }

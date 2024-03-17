@@ -47,8 +47,7 @@ public class UsuarioService {
 
         Usuario savedUser = usuarioRepository.save(usuario);
 
-         return UsuarioResponseDTO.from(savedUser);
+        return UsuarioResponseDTO.from(savedUser);
 
-    
     }
 }

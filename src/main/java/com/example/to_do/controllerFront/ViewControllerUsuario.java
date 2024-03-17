@@ -27,8 +27,11 @@ public class ViewControllerUsuario {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    public String mostrarLogin(Model model) {
         model.addAttribute("usuario", new UsuarioDTO());
         return "lo";
     }
@@ -36,27 +39,25 @@ public class ViewControllerUsuario {
     @PostMapping("/login")
     public String login(UsuarioDTO usuario, Model model, RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
-        RestTemplate restTemplate = new RestTemplate();
         try {
             ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/usuarios/login",
                     usuario, String.class);
             if (response.getStatusCode() == HttpStatus.OK) {
                 String token = response.getBody();
                 request.getSession().setAttribute("token", token);
-
             }
             return "redirect:/tarefas/pendentes";
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 redirectAttributes.addFlashAttribute("error", "email ou senha invalidos");
-
             }
             return "redirect:/login";
         }
     }
 
     @GetMapping("/cadastrar")
-    public String mostrarFormulario(UsuarioDTO usuarioDTO) {
+    public String mostrarFormulario(Model model) {
+        model.addAttribute("usuarioDTO", new UsuarioDTO());
         return "cadastrar";
     }
 
@@ -67,26 +68,26 @@ public class ViewControllerUsuario {
             return "redirect:/cadastrar";
         }
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<UsuarioDTO> request = new HttpEntity<>(usuarioDTO, headers);
+        HttpEntity<UsuarioDTO> entity = new HttpEntity<>(usuarioDTO, headers);
         try {
             ResponseEntity<UsuarioResponseDTO> response = restTemplate
-                    .postForEntity("http://localhost:8080/api/usuarios/cadastrar", request, UsuarioResponseDTO.class);
+                    .postForEntity("http://localhost:8080/api/usuarios/cadastrar", entity, UsuarioResponseDTO.class);
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
                 redirectAttributes.addFlashAttribute("sucesso", "cadastrado  com sucesso");
                 return "redirect:/cadastrar";
             } else {
-
                 return "redirect:/cadastrar";
             }
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.CONFLICT) {
                 String errorMessage = e.getResponseBodyAsString();
-                redirectAttributes.addFlashAttribute("error", errorMessage);
+                redirectAttributes.addFlashAttribute("error", errorMessage);// seria melhor pegar exeção e responder de
+                                                                            // acordo com a mensagem de erro que vem da
+                                                                            // api,mas como a mengem é boa botei aqui
             }
             return "redirect:/cadastrar";
         }

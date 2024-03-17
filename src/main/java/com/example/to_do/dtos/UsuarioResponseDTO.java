@@ -11,6 +11,7 @@ public class UsuarioResponseDTO {
     private Long id;
     private String nome;
     private String email;
+
     @Hidden
     public static UsuarioResponseDTO from(Usuario usuario) {
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO();

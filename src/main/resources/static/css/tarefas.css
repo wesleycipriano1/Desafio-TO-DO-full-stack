@@ -70,5 +70,41 @@ body {
     border-radius: 10px;
     margin-left: auto; 
   }
+  #bt-concluir{
+    color: black;
+    font: bolder;
+    width: 30%;
+    background-color: green;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .prioridade-alta {
+   
+    color: black;
+    background-color: rgba(255, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: bold;
+
+    
+  }
+  .prioridade-media {
+    color:black;
+    background-color: rgb(255, 166, 0,0.9);
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: bold;
+
+  }
+  .prioridade-baixa {
+    color: black;
+    background-color: rgb(0, 128, 0,0.8);
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: bold;
+
+  }
+  
 
 

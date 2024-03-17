@@ -2,7 +2,6 @@ package com.example.to_do.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.management.relation.RoleNotFoundException;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,8 @@ import com.example.to_do.dtos.TarefasDTO;
 import com.example.to_do.entidades.Tarefas;
 import com.example.to_do.entidades.Usuario;
 import com.example.to_do.excecao.DadosVaziosException;
+import com.example.to_do.excecao.TarefaNaoEncontradaPorIdException;
+import com.example.to_do.excecao.UsuarioNaoAutenticadoException;
 import com.example.to_do.repository.TarefaRepository;
 import com.example.to_do.repository.UsuarioRepository;
 
@@ -27,12 +28,12 @@ public class TarefaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private UserDetails getAuthenticatedUser() {
+    UserDetails getAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             return (UserDetails) principal;
         } else {
-            throw new UsernameNotFoundException("Usuário não encontrado");
+            throw new UsuarioNaoAutenticadoException("Usuário não autenticado");
         }
     }
 
@@ -70,12 +71,12 @@ public class TarefaService {
     public void excluirTarefa(Long id) {
         try {
             Tarefas tarefa = tarefaRepository.findById(id)
-                    .orElseThrow(() -> new RoleNotFoundException("Tarefa não encontrada com o id " + id));
+                    .orElseThrow(() -> new TarefaNaoEncontradaPorIdException("Tarefa não encontrada com o id " + id));
 
             verificarPermissao(tarefa);
 
             tarefaRepository.delete(tarefa);
-        } catch (RoleNotFoundException e) {
+        } catch (TarefaNaoEncontradaPorIdException e) {
 
             e.printStackTrace();
         }
@@ -83,7 +84,7 @@ public class TarefaService {
 
     public TarefaResponseDTO alterarTarefa(Long id, TarefasDTO tarefaDto) {
         Tarefas tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com o id " + id));
+                .orElseThrow(() -> new TarefaNaoEncontradaPorIdException("Tarefa não encontrada com o id " + id));
 
         verificarPermissao(tarefa);
 

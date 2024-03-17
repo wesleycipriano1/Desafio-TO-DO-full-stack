@@ -23,7 +23,7 @@ public class SecurityConfig {
     public FilterToken filter;
 
 
-    //a parte mais complexa é sempre ter que liberar as rotas,fazendo o projeot junto os caminhos do css tem que ser liberado aqui
+    //a parte mais complexa é sempre ter que liberar as rotas,fazendo o projeto junto os caminhos do css tem que ser liberado aqui
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()

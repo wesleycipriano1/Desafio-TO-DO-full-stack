@@ -9,20 +9,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        final String securitySchemeName = "bearerAuth";
-        return new OpenAPI()
-                .components(
-                        new Components()
-                                .addSecuritySchemes(securitySchemeName,
-                                        new SecurityScheme()
-                                                .name(securitySchemeName)
-                                                .type(SecurityScheme.Type.HTTP)
-                                                .scheme("bearer")
-                                                .bearerFormat("JWT")
-                                )
-                );
-    }
+        @Bean
+        public OpenAPI customOpenAPI() {
+                final String securitySchemeName = "bearerAuth";
+                return new OpenAPI()
+                                .components(
+                                                new Components()
+                                                                .addSecuritySchemes(securitySchemeName,
+                                                                                new SecurityScheme()
+                                                                                                .name(securitySchemeName)
+                                                                                                .type(SecurityScheme.Type.HTTP)
+                                                                                                .scheme("bearer")
+                                                                                                .bearerFormat("JWT")));
+        }
 }
-

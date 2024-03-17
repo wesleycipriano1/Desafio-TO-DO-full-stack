@@ -23,31 +23,37 @@ public class LoginDTO implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
     }
+
     @Hidden
     @Override
     public String getPassword() {
         return senha;
     }
+
     @Hidden
     @Override
     public String getUsername() {
         return email;
     }
+
     @Hidden
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
     @Hidden
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @Hidden
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @Hidden
     @Override
     public boolean isEnabled() {

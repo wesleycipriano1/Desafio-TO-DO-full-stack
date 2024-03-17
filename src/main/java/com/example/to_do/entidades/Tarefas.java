@@ -14,12 +14,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tarefas implements Serializable{
+public class Tarefas implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public enum Prioridade {
@@ -45,4 +45,3 @@ public class Tarefas implements Serializable{
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 }
-

@@ -5,10 +5,13 @@ import com.example.to_do.entidades.Tarefas;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class TarefasDTO {
     @Hidden
     private Long id;
@@ -18,5 +21,4 @@ public class TarefasDTO {
     @Hidden
     private Long usuarioId;
 
-    
 }

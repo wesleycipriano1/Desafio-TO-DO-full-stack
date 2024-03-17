@@ -1,6 +1,5 @@
 package com.example.to_do.dtos;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,4 +10,3 @@ public class UsuarioDTO {
     private String email;
     private String senha;
 }
-

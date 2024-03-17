@@ -4,7 +4,7 @@
     <title>Tarefas Pendentes</title>
     <link rel="stylesheet" th:href="@{/css/tarefas.css}" />
   </head>
-  <body style="background-image: url('/img/fundo.png'); background-size: cover;">
+  <body style="background-image: url('/img/fundo.png'); background-size: cover">
     <div class="container">
       <div class="titulo">
         <h2>Tarefas Pendentes</h2>
@@ -39,13 +39,19 @@
           <tbody id="tarefas">
             <tr th:each="tarefa : ${tarefas}">
               <td th:text="${tarefa.descricao}"></td>
-              <td th:text="${tarefa.prioridade}"></td>
+              <td>
+                <span
+                  th:class="${'prioridade-' + tarefa.prioridade.toLowerCase()}"
+                  th:text="${tarefa.prioridade}"
+                ></span>
+              </td>
+
               <td>
                 <form
                   th:action="@{/concluir/{id}(id=${tarefa.id})}"
                   th:method="post"
                 >
-                  <input type="submit" value="Concluir" />
+                  <input id="bt-concluir" type="submit" value="Concluir" />
                 </form>
               </td>
             </tr>

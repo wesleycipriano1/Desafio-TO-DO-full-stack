@@ -1,7 +1,5 @@
 package com.example.to_do.entidades;
 
-
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +8,6 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,9 +22,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario implements UserDetails, Serializable {
@@ -58,8 +55,7 @@ public class Usuario implements UserDetails, Serializable {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-       
-        
+
     }
 
     @Override
@@ -92,4 +88,3 @@ public class Usuario implements UserDetails, Serializable {
         return true;
     }
 }
-
